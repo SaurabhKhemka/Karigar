@@ -1,2 +1,0 @@
-# Karigar
-Karigar Web App
