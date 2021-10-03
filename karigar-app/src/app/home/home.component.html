@@ -1,0 +1,41 @@
+<app-header></app-header>
+
+<div class="p10">
+  <mat-card class="example-card" (click)="navigate('excel')" *ngIf="isAdmin">
+    <mat-card-title-group>
+      <mat-card-title>Upload Data/Add New Record</mat-card-title>
+      <mat-card-subtitle>Generate Barcode</mat-card-subtitle>
+      <img mat-card-md-image src="/assets/icons/excel.jpeg" />
+    </mat-card-title-group>
+    <mat-card-content> </mat-card-content>
+  </mat-card>
+
+  <mat-card class="example-card" (click)="navigate('customer')">
+    <mat-card-title-group>
+      <mat-card-title>Customers</mat-card-title>
+      <mat-card-subtitle>Add/Edit Customers</mat-card-subtitle>
+      <img mat-card-md-image src="/assets/icons/customer.png" />
+    </mat-card-title-group>
+    <mat-card-content> </mat-card-content>
+  </mat-card>
+
+  <mat-card class="example-card" (click)="navigate('scan')">
+    <mat-card-title-group>
+      <mat-card-title>Scan Products</mat-card-title>
+      <mat-card-subtitle>Order/Sale</mat-card-subtitle>
+      <img mat-card-md-image src="/assets/icons/scan.png" />
+    </mat-card-title-group>
+    <mat-card-content> </mat-card-content>
+  </mat-card>
+
+  <mat-card class="example-card" (click)="navigate('search')">
+    <mat-card-title-group>
+      <mat-card-title>Search Products</mat-card-title>
+      <mat-card-subtitle
+        >Filter products by applying search criteria</mat-card-subtitle
+      >
+      <img mat-card-md-image src="/assets/icons/search.png" />
+    </mat-card-title-group>
+    <mat-card-content> </mat-card-content>
+  </mat-card>
+</div>

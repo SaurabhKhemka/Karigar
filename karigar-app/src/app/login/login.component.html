@@ -1,0 +1,52 @@
+<app-header></app-header>
+
+<mat-card>
+  <mat-card-title>Login</mat-card-title>
+  <mat-card-content>
+    <form #loginForm="ngForm" novalidate>
+      <p>
+        <mat-form-field>
+          <input
+            type="text"
+            matInput
+            placeholder="Username"
+            [(ngModel)]="loginObj.username"
+            name="username"
+            required
+            #username="ngModel"
+          />
+        </mat-form-field>
+        <mat-error *ngIf="!username.valid && username.touched">
+          <div *ngIf="username.errors?.required" class="text-danger">
+            This field is required.
+          </div>
+        </mat-error>
+      </p>
+
+      <p>
+        <mat-form-field>
+          <input
+            type="password"
+            matInput
+            placeholder="Password"
+            [(ngModel)]="loginObj.password"
+            name="password"
+            required
+            #password="ngModel"
+          />
+        </mat-form-field>
+        <mat-error *ngIf="!password.valid && password.touched">
+          <div *ngIf="password.errors?.required" class="text-danger">
+            This field is required.
+          </div>
+        </mat-error>
+      </p>
+
+      <div class="button">
+        <button color="primary" mat-raised-button (click)="login()">
+          Login
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

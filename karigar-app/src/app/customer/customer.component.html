@@ -1,0 +1,225 @@
+<app-header></app-header>
+
+<div class="p10">
+  <mat-label
+    >Select a customer to view/edit information
+    <mat-form-field appearance="fill">
+      <mat-label>Select a customer</mat-label>
+      <mat-select [(ngModel)]="selectedCustomer">
+        <mat-option value="{}">None</mat-option>
+        <mat-option *ngFor="let c of customers" [value]="c">{{
+          c.name
+        }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <p>OR</p>
+    <p>Add a new customer using below form</p></mat-label
+  >
+
+  <p></p>
+
+  <strong
+    ><h1>
+      {{
+        (selectedCustomer && selectedCustomer.id ? "Edit" : "Add New") +
+          " Customer"
+      }}
+    </h1></strong
+  >
+  <mat-divider></mat-divider>
+
+  <form #customerForm="ngForm" novalidate>
+    <p>
+      <mat-form-field>
+        <input
+          type="text"
+          matInput
+          placeholder="Name"
+          [(ngModel)]="selectedCustomer.name"
+          name="name"
+          required
+          #name="ngModel"
+          autocomplete="off"
+        />
+      </mat-form-field>
+      <mat-error *ngIf="!name.valid && name.touched">
+        <div *ngIf="name.errors?.required" class="text-danger">
+          This field is required.
+        </div>
+      </mat-error>
+    </p>
+
+    <p>
+      <mat-form-field>
+        <input
+          type="email"
+          matInput
+          placeholder="Email"
+          [(ngModel)]="selectedCustomer.email"
+          name="email"
+          #email="ngModel"
+          autocomplete="off"
+          pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$"
+        />
+      </mat-form-field>
+      <mat-error *ngIf="!email.valid && email.touched">
+        <div *ngIf="email.errors?.required" class="text-danger">
+          This field is required.
+        </div>
+        <div *ngIf="email.errors?.pattern" class="text-danger">
+          Please enter a valid email address.
+        </div>
+      </mat-error>
+    </p>
+
+    <p>
+      <mat-form-field>
+        <input
+          type="text"
+          matInput
+          placeholder="Phone number"
+          [(ngModel)]="selectedCustomer.phone"
+          name="phone"
+          #phone="ngModel"
+          (keypress)="numberOnly($event)"
+          autocomplete="off"
+        />
+      </mat-form-field>
+      <mat-error *ngIf="!phone.valid && phone.touched">
+        <div *ngIf="phone.errors?.required" class="text-danger">
+          This field is required.
+        </div>
+      </mat-error>
+    </p>
+
+    <p>
+      <mat-form-field>
+        <input
+          type="text"
+          matInput
+          placeholder="Mobile number"
+          [(ngModel)]="selectedCustomer.mobile"
+          name="mobile"
+          #mobile="ngModel"
+          minlength="10"
+          maxlength="10"
+          (keypress)="numberOnly($event)"
+          required
+          autocomplete="off"
+        />
+        <mat-hint align="end">{{ mobile?.value?.length }} / 10</mat-hint>
+      </mat-form-field>
+      <mat-error *ngIf="!mobile.valid && mobile.touched">
+        <div *ngIf="mobile.errors?.required" class="text-danger">
+          This field is required.
+        </div>
+        <div
+          *ngIf="mobile.errors?.minlength || mobile.errors?.maxlength"
+          class="text-danger"
+        >
+          Mobile Number should be 10 digits.
+        </div>
+      </mat-error>
+    </p>
+
+    <p>
+      <mat-form-field>
+        <textarea
+          type="text"
+          matInput
+          placeholder="Address"
+          [(ngModel)]="selectedCustomer.address"
+          name="Address"
+          #address="ngModel"
+          required
+        ></textarea>
+        <mat-hint align="end">{{ address?.value?.length }} / 256</mat-hint>
+      </mat-form-field>
+      <mat-error *ngIf="!address.valid && address.touched">
+        <div *ngIf="address.errors?.required" class="text-danger">
+          This field is required.
+        </div>
+      </mat-error>
+    </p>
+
+    <p>
+      <mat-form-field>
+        <input
+          type="text"
+          matInput
+          placeholder="Pincode"
+          [(ngModel)]="selectedCustomer.pincode"
+          name="pincode"
+          #pincode="ngModel"
+          minlength="6"
+          maxlength="6"
+          (keypress)="numberOnly($event)"
+          required
+          (blur)="fetchStatesandDistricts(selectedCustomer.pincode)"
+        />
+        <mat-hint align="end">{{ pincode?.value?.length }} / 6</mat-hint>
+      </mat-form-field>
+      <mat-error *ngIf="!pincode.valid && pincode.touched">
+        <div *ngIf="pincode.errors?.required" class="text-danger">
+          This field is required.
+        </div>
+        <div
+          *ngIf="pincode.errors?.minlength || pincode.errors?.maxlength"
+          class="text-danger"
+        >
+          Pincode should be 6 digits.
+        </div>
+      </mat-error>
+    </p>
+
+    <p>
+      <mat-form-field>
+        <mat-select
+          [(ngModel)]="selectedCustomer.state"
+          #state="ngModel"
+          required
+          name="state"
+          placeholder="Select a state"
+          [disabled]="!customerForm.form.controls.pincode.valid"
+        >
+          <mat-option *ngFor="let s of stateArray" [value]="s">{{
+            s.State
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-error *ngIf="!state.valid && state.touched">
+        <div *ngIf="state.errors?.required" class="text-danger">
+          This field is required.
+        </div>
+      </mat-error>
+    </p>
+
+    <p>
+      <mat-form-field>
+        <mat-select
+          [(ngModel)]="selectedCustomer.city"
+          #city="ngModel"
+          required
+          name="district"
+          placeholder="Select a district"
+          [disabled]="!customerForm.form.controls.pincode.valid"
+        >
+          <mat-option *ngFor="let s of districtArray" [value]="s">{{
+            s.District
+          }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-error *ngIf="!city.valid && city.touched">
+        <div *ngIf="city.errors?.required" class="text-danger">
+          This field is required.
+        </div>
+      </mat-error>
+    </p>
+
+    <div class="button">
+      <button color="primary" mat-raised-button (click)="updateCustomer()">
+        Submit
+      </button>
+    </div>
+  </form>
+</div>

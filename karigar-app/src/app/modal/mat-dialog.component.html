@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>{{ data.title }}</h1>
+<div mat-dialog-content>
+  <p>{{ data.content }} {{ data.yesButton.length }}</p>
+</div>
+<div mat-dialog-actions>
+  <button *ngIf="data.noButton" mat-button (click)="onNoClick()">
+    {{ data.noButton }}
+  </button>
+  <button *ngIf="data.yesButton" mat-button>
+    {{ data.yesButton }}
+  </button>
+</div>

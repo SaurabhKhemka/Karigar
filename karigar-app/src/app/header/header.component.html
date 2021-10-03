@@ -1,0 +1,19 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span (click)="navigate('home')">Karigar App</span>
+    <span class="example-fill-remaining-space"></span>
+    <span class="align-center"></span>
+    <span class="example-spacer"></span>
+    <button mat-button (click)="openModal('about')">About</button>
+    <button mat-button (click)="openModal('contact')">Contact</button>
+    <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="isLoggedInIser">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar-row>
+</mat-toolbar>
