@@ -32,7 +32,11 @@ export class CustomerService {
   }
 
   saveCustomer(reqObj: any) {
-    return this.http.post(this.API_ENDPOINT + (reqObj.customerId ? '/update/' : '/add/') + 'customerDetails', reqObj);
+    if (reqObj.customerId) {
+      return this.http.put(this.API_ENDPOINT + '/update/customerDetails', reqObj);
+    } else {
+      return this.http.post(this.API_ENDPOINT + '/add/customerDetails', reqObj);
+    }
   }
 
   deleteCustomer(customerId: any) {
