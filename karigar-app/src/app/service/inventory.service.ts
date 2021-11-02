@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class InventoryService {
-  public readonly API_ENDPOINT: string = 'https://www.userdomain.com/';
+  public readonly API_ENDPOINT: string = 'http://localhost:2018/';
   constructor(private http: HttpClient) { }
 
   uploadFile(data: any) {
