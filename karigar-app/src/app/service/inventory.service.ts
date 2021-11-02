@@ -56,7 +56,7 @@ export class InventoryService {
   getCustomerOrdersPurchasesWithinDateRange(reqObj: any) {
     reqObj.fromDate = reqObj.fromDate ? reqObj.fromDate.toString().split("-").reverse().join("-") : null;
     reqObj.toDate = reqObj.toDate ? reqObj.toDate.toString().split("-").reverse().join("-") : null;
-    return this.http.post(this.API_ENDPOINT + 'inventory/' + (reqObj.type === "sale" ? 'getCustomerPurchasesWithinDateRange' : 'getCustomerOrdersWithinDateRange'), reqObj);
+    return this.http.post(this.API_ENDPOINT + '/inventory/' + (reqObj.type === "sale" ? 'getCustomerPurchasesWithinDateRange' : 'getCustomerOrdersWithinDateRange'), reqObj);
 
     // return new Promise((resolve) => {
     //   resolve([
@@ -78,11 +78,11 @@ export class InventoryService {
   }
 
   getInventoryItem(itemId: string) {
-    return this.http.get(this.API_ENDPOINT + "inventory/getInventoryItem?itemId=" + itemId);
+    return this.http.get(this.API_ENDPOINT + "/inventory/getInventoryItem?itemId=" + itemId);
   }
 
   getOrderItem(itemId: string) {
-    return this.http.get(this.API_ENDPOINT + "inventory/getOrderItem?itemId=" + itemId);
+    return this.http.get(this.API_ENDPOINT + "/inventory/getOrderItem?itemId=" + itemId);
   }
 
   order(reqObj: any) {
@@ -98,10 +98,10 @@ export class InventoryService {
   }
 
   getCustomerOrders(customerId: string) {
-    return this.http.get(this.API_ENDPOINT + 'inventory/getCustomerOrders?customerId=' + customerId);
+    return this.http.get(this.API_ENDPOINT + '/inventory/getCustomerOrders?customerId=' + customerId);
   }
 
   getCustomerPurchases(customerId: string) {
-    return this.http.get(this.API_ENDPOINT + 'inventory/getCustomerPurchases?customerId=' + customerId);
+    return this.http.get(this.API_ENDPOINT + '/inventory/getCustomerPurchases?customerId=' + customerId);
   }
 }
