@@ -8,7 +8,7 @@ import * as _ from 'underscore';
 
 
 export class CustomerService {
-  public readonly API_ENDPOINT: string = 'http://localhost:2017/';
+  public readonly API_ENDPOINT: string = 'http://localhost:2017';
   constructor(private http: HttpClient) { }
 
   getCustomers() {
