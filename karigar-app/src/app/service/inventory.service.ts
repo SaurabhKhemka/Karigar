@@ -54,9 +54,15 @@ export class InventoryService {
   }
 
   getCustomerOrdersPurchasesWithinDateRange(reqObj: any) {
-    reqObj.fromDate = reqObj.fromDate ? reqObj.fromDate.toString().split("-").reverse().join("-") : null;
-    reqObj.toDate = reqObj.toDate ? reqObj.toDate.toString().split("-").reverse().join("-") : null;
-    return this.http.get(this.API_ENDPOINT + '/inventory/' + (reqObj.type === "sale" ? 'getCustomerPurchasesWithinDateRange' : 'getCustomerOrdersWithinDateRange') + '?customerId=' + reqObj.customerId + '&fromDate=' + reqObj.fromDate + '&toDate=' + reqObj.toDate);
+    if (reqObj.fromDate && reqObj.toDate) {
+      reqObj.fromDate = reqObj.fromDate ? reqObj.fromDate.toString().split("-").reverse().join("-") : null;
+
+      reqObj.toDate = reqObj.toDate ? reqObj.toDate.toString().split("-").reverse().join("-") : null;
+
+      return this.http.get(this.API_ENDPOINT + '/inventory/' + (reqObj.type === "sale" ? 'getCustomerPurchasesWithinDateRange' : 'getCustomerOrdersWithinDateRange') + '?customerId=' + reqObj.customerId + '&fromDate=' + reqObj.fromDate + '&toDate=' + reqObj.toDate);
+    } else {
+      return this.http.get(this.API_ENDPOINT + '/inventory/' + (reqObj.type === "sale" ? 'getCustomerPurchases' : 'getCustomerOrders') + '?customerId=' + reqObj.customerId);
+    }
 
     // return new Promise((resolve) => {
     //   resolve([

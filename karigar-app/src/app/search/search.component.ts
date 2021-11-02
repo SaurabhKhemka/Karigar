@@ -58,8 +58,8 @@ export class SearchComponent implements OnInit {
   }
 
   filterResults() {
-    if (!this.filterData.type) {
-      this.snackBar.open("Please select type", '', {
+    if (!this.filterData.type || !this.filterData.customerId) {
+      this.snackBar.open("Please select type and customer", '', {
         duration: 2000,
       });
     } else {
