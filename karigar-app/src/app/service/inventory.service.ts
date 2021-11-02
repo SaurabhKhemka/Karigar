@@ -9,12 +9,7 @@ export class InventoryService {
   constructor(private http: HttpClient) { }
 
   uploadFile(data: any) {
-    return this.http.post(
-      '/cphm/lab/generalLabTestFile/individual/' +
-      '' +
-      '/labTestId/' +
-      '' +
-      '/attachFile',
+    return this.http.post(this.API_ENDPOINT + '/inventory/readFile',
       data
     );
   }
