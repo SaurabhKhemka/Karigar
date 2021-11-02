@@ -87,7 +87,7 @@ export class ExcelComponent implements OnInit {
   }
 
   onSheetChange(event: any) {
-    this.inventoryService.getProducts(event).subscribe((response: any) => {
+    this.inventoryService.getProducts(event.value).subscribe((response: any) => {
       this.dataSource = new MatTableDataSource(response);
     },
       (error) => console.log(error)
