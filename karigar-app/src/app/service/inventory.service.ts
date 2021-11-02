@@ -56,7 +56,7 @@ export class InventoryService {
   getCustomerOrdersPurchasesWithinDateRange(reqObj: any) {
     reqObj.fromDate = reqObj.fromDate ? reqObj.fromDate.toString().split("-").reverse().join("-") : null;
     reqObj.toDate = reqObj.toDate ? reqObj.toDate.toString().split("-").reverse().join("-") : null;
-    return this.http.post(this.API_ENDPOINT + '/inventory/' + (reqObj.type === "sale" ? 'getCustomerPurchasesWithinDateRange' : 'getCustomerOrdersWithinDateRange'), reqObj);
+    return this.http.get(this.API_ENDPOINT + '/inventory/' + (reqObj.type === "sale" ? 'getCustomerPurchasesWithinDateRange' : 'getCustomerOrdersWithinDateRange') + '?customerId=' + reqObj.customerId + '&fromDate=' + reqObj.fromDate + '&toDate=' + reqObj.toDate);
 
     // return new Promise((resolve) => {
     //   resolve([
