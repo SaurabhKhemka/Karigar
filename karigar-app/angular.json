@@ -76,9 +76,6 @@
               "browserTarget": "karigar-app:build:development"
             }
           },
-          "options": {
-            "port": 2017
-          },
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
