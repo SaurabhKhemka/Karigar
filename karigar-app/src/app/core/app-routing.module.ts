@@ -8,7 +8,7 @@ import { ScanComponent } from '../scan/scan.component';
 import { SearchComponent } from '../search/search.component';
 
 const routes: Routes = [
-  { path: '', component: LoginComponent, pathMatch: 'full' },
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'home', component: HomeComponent },
   { path: 'excel', component: ExcelComponent },

@@ -1,7 +1,11 @@
 <app-header></app-header>
 
-<div class="p10">
-  <mat-card class="example-card" (click)="navigate('excel')" *ngIf="isAdmin">
+<div class="p10" *ngIf="userDetails.id; else loggedOut">
+  <mat-card
+    class="example-card"
+    (click)="navigate('excel')"
+    *ngIf="userDetails.role === 'admin'"
+  >
     <mat-card-title-group>
       <mat-card-title>Upload Data/Add New Record</mat-card-title>
       <mat-card-subtitle>Generate Barcode</mat-card-subtitle>
@@ -22,7 +26,7 @@
   <mat-card class="example-card" (click)="navigate('scan')">
     <mat-card-title-group>
       <mat-card-title>Scan Products</mat-card-title>
-      <mat-card-subtitle>Order/Sale</mat-card-subtitle>
+      <mat-card-subtitle>Order/Sale/Return</mat-card-subtitle>
       <img mat-card-md-image src="/assets/icons/scan.png" />
     </mat-card-title-group>
     <mat-card-content> </mat-card-content>
@@ -39,3 +43,9 @@
     <mat-card-content> </mat-card-content>
   </mat-card>
 </div>
+
+<ng-template #loggedOut>
+  <span class="m20 tac disBlock fs30"
+    >Please <a href="/login">Login</a> again.</span
+  ></ng-template
+>

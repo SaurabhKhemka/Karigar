@@ -1,5 +1,9 @@
 <app-header></app-header>
 
+<!-- <ngx-barcode [bc-value]="value" [bc-display-value]="true"></ngx-barcode> -->
+
+<app-spinner *ngIf="isLoading"></app-spinner>
+
 <mat-card>
   <mat-card-title>Login</mat-card-title>
   <mat-card-content>

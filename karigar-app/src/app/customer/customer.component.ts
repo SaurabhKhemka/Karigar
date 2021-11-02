@@ -1,96 +1,91 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 import * as _ from 'underscore';
-import { ApiClientService } from '../api-client.service';
+import { MaterialDialog } from '../modal/mat-dialog.component';
+import { CustomerService } from "../service/customer-service";
+import { CustomerFormComponent } from './customer-form/customer-form.component';
+
 @Component({
   selector: 'app-customer',
   templateUrl: './customer.component.html',
   styleUrls: ['./customer.component.scss'],
 })
 export class CustomerComponent implements OnInit {
-  selectedCustomer = {
-    id: '',
-    name: '',
-    email: '',
-    phone: '',
-    mobile: '',
-    address: '',
-    pincode: '',
-    state: '',
-    city: '',
-  };
-
-  showSpinner: boolean = false;
-
-  @ViewChild('customerForm', { static: false })
-  customerForm!: NgForm;
-  stateArray: any[] = [];
-  districtArray: any[] = [];
-
-  customers: any[] = [];
-  constructor(private apiClient: ApiClientService) {}
+  displayedColumns: string[] = [
+    'customerName',
+    'emailId',
+    'phoneNumber',
+    'mobileNumber',
+    'address',
+    'state',
+    'district',
+    'pincode',
+    'action',
+  ];
+  dataSource: any;
+  isLoading: boolean = false;
+  constructor(
+    private customerService: CustomerService,
+    private dialog: MatDialog
+  ) { }
 
   ngOnInit(): void {
-    this.customers = [
-      {
-        id: 1,
-        name: 'agarwal',
-        email: 'wewqeqwe',
-        phone: '456432145',
-        mobile: '345632213',
-        address: 'ewewqewq',
-        state: 'ewwewqewq',
-        city: 'ewrewrewr',
-        pincode: 'ewwqewqe',
+    this.fetchAllCustomers();
+  }
+
+  fetchAllCustomers() {
+    this.customerService.getCustomers().subscribe((response: any) => {
+      this.dataSource = new MatTableDataSource(response);
+    },
+      (error) => console.log(error)
+    );
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  editCustomer(customer: any) {
+    const c = _.clone(customer);
+    const dialogRef = this.dialog.open(CustomerFormComponent, {
+      width: '500px',
+      data: {
+        title: c.customerId ? 'Update Customer Details' : 'Add Customer Details',
+        selectedCustomer: c,
+        noButton: 'Cancel',
+        yesButton: 'SAVE',
       },
-      {
-        id: 2,
-        name: 'agarwal',
-        email: 'wewqeqwe',
-        phone: '456432145',
-        mobile: '345632213',
-        address: 'ewewqewq',
-        state: 'ewwewqewq',
-        city: 'ewrewrewr',
-        pincode: 'ewwqewqe',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      this.fetchAllCustomers();
+    });
+  }
+
+  deleteCustomer(customer: any) {
+    const dialogRef = this.dialog.open(MaterialDialog, {
+      width: '500px',
+      data: {
+        title: 'Delete Customer Details',
+        content: 'Are you sure you want to delete customer?',
+        noButton: 'Cancel',
+        yesButton: 'YES',
       },
-    ];
-  }
+    });
 
-  fetchStatesandDistricts(pincode: string) {
-    if (this.customerForm.form.controls.pincode.valid) {
-      this.apiClient.fetchStatesandDistricts(pincode).subscribe((data: any) => {
-        console.log(data);
-        if (data && data[0].Status === 'Success') {
-          this.stateArray = _.uniq(data[0].PostOffice, function (x) {
-            return x.State;
-          });
-
-          this.districtArray = _.uniq(data[0].PostOffice, function (x) {
-            return x.District;
-          });
-        } else {
-          alert('nothing found');
-        }
-      });
-    }
-  }
-
-  updateCustomer() {
-    if (this.customerForm.form.valid) {
-
-    } else {
-      _.each(Object.keys(this.customerForm.form.controls), (control: any) => {
-        this.customerForm.form.controls[control].markAsTouched();
-      });
-    }
-  }
-
-  numberOnly(event: any): boolean {
-    const charCode = event.which ? event.which : event.keyCode;
-    if (charCode > 31 && (charCode < 48 || charCode > 57)) {
-      return false;
-    }
-    return true;
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.customerService.deleteCustomer(customer.customerId).subscribe(
+          (data: any) => {
+            if (data) {
+              this.fetchAllCustomers();
+            }
+          },
+          (error) => console.log(error)
+        );
+      }
+    });
   }
 }

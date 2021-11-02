@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { Constants } from '../constants/credentials';
+import { SharedService } from "../shared/shared.service";
 
 @Component({
   selector: 'app-login',
@@ -19,26 +18,46 @@ export class LoginComponent implements OnInit {
 
   @ViewChild('loginForm', { static: false })
   loginForm!: NgForm;
+  isLoading: boolean = false;
 
-  constructor(private router: Router, private dialog: MatDialog) {}
+  constructor(private router: Router, private sharedService: SharedService) { }
 
   ngOnInit() {
-    sessionStorage.clear();
+    localStorage.clear();
   }
 
   login(): void {
+    localStorage.clear();
     if (this.loginForm.form.valid) {
-      const foundUser: any = Constants.CREDENTIALS.find((cred) => {
-        return cred.user === this.loginObj.username;
-      });
+      this.isLoading = true;
+      this.sharedService
+        .authenticateUser(
+          this.loginObj.username,
+          window.btoa(this.loginObj.password)
+        )
+        .subscribe(
+          (data: any) => {
+            if (data.success) {
+              localStorage.setItem(
+                'userDetails',
+                JSON.stringify({
+                  name: data.name,
+                  id: data.id,
+                  role: data.role,
+                })
+              );
+              this.router.navigate(['home']);
+            } else {
+              alert('Invalid credentials.');
+            }
+            this.isLoading = false;
+          },
+          (error) => {
+            this.isLoading = true;
 
-      if (foundUser.password === this.loginObj.password) {
-        sessionStorage.setItem('isUserType', foundUser.role);
-        this.router.navigate(['home']);
-      } else {
-        sessionStorage.clear();
-        alert('Invalid credentials');
-      }
+            console.log(error);
+          }
+        );
     } else {
       this.loginForm.form.controls.username.markAsTouched();
       this.loginForm.form.controls.password.markAsTouched();

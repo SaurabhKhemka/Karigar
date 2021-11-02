@@ -4,7 +4,137 @@
   <p>Click on the "Choose File" button to upload a file:</p>
 
   <form>
-    <input type="file" id="myFile" name="filename" />
-    <button color="primary" mat-raised-button>Submit</button>
+    <input
+      type="file"
+      id="resultReportUpload"
+      id="myFile"
+      (change)="chooseFile($event)"
+      name="File"
+      accept=".xlsx"
+    />
+
+    <button color="primary" mat-raised-button (click)="uploadFile()">
+      Submit
+    </button>
   </form>
+</div>
+
+<div class="p10">
+  <form class="form-group form-inline" #visitorForm="ngForm" novalidate>
+    <mat-form-field appearance="fill" class="w100">
+      <mat-select
+        [(ngModel)]="filterData.sheetName"
+        name="sheetName"
+        placeholder="Select a sheet"
+        (selectionChange)="onSheetChange($event)"
+      >
+        <mat-option *ngFor="let s of sheets" [value]="s">{{ s }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+
+  <div class="disInlBlock w100">
+    <mat-form-field appearance="standard">
+      <mat-label>Filter</mat-label>
+      <input
+        matInput
+        (keyup)="applyFilter($event)"
+        placeholder="Enter search contents"
+        #input
+      />
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="exportTable()"
+      class="pull-right mt20"
+    >
+      Download in Excel
+    </button>
+
+    <!-- <mat-paginator [length]="resultsLength" [pageSize]="30" aria-label="Select page of GitHub search results"></mat-paginator> -->
+  </div>
+</div>
+
+<div class="table-container">
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    class="mat-elevation-z8"
+    id="ExampleMaterialTable"
+  >
+    <ng-container matColumnDef="sheetName">
+      <th mat-header-cell *matHeaderCellDef>Sheet Name</th>
+      <td mat-cell *matCellDef="let element">{{ element.sheetName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="serialNo">
+      <th mat-header-cell *matHeaderCellDef>Serial No.</th>
+      <td mat-cell *matCellDef="let element">{{ element.serialNo }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="grossWeight">
+      <th mat-header-cell *matHeaderCellDef>Gross Weight</th>
+      <td mat-cell *matCellDef="let element">{{ element.grossWeight }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="netWeight">
+      <th mat-header-cell *matHeaderCellDef>Net Weight</th>
+      <td mat-cell *matCellDef="let element">{{ element.netWeight }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="beadWeight">
+      <th mat-header-cell *matHeaderCellDef>Bead Weight</th>
+      <td mat-cell *matCellDef="let element">{{ element.beadWeight }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="a">
+      <th mat-header-cell *matHeaderCellDef>A</th>
+      <td mat-cell *matCellDef="let element">{{ element.a }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="b">
+      <th mat-header-cell *matHeaderCellDef>B</th>
+      <td mat-cell *matCellDef="let element">{{ element.b }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="c">
+      <th mat-header-cell *matHeaderCellDef>C</th>
+      <td mat-cell *matCellDef="let element">{{ element.c }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="d">
+      <th mat-header-cell *matHeaderCellDef>D</th>
+      <td mat-cell *matCellDef="let element">{{ element.d }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="e">
+      <th mat-header-cell *matHeaderCellDef>E</th>
+      <td mat-cell *matCellDef="let element">{{ element.e }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="karigarName">
+      <th mat-header-cell *matHeaderCellDef>Karigar Name</th>
+      <td mat-cell *matCellDef="let element">{{ element.karigarName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="excelNo">
+      <th mat-header-cell *matHeaderCellDef>Excel No.</th>
+      <td mat-cell *matCellDef="let element">{{ element.excelNo }}</td>
+    </ng-container>
+
+    <!-- <ng-container matColumnDef="d">
+        <th mat-header-cell *matHeaderCellDef>D</th>
+        <td mat-cell *matCellDef="let element">
+          <ngx-barcode
+            [bc-value]="value"
+            [bc-display-value]="true"
+          ></ngx-barcode>
+        </td>
+      </ng-container> -->
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
 </div>

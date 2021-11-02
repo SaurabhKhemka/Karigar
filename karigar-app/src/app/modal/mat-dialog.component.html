@@ -1,12 +1,17 @@
-<h1 mat-dialog-title>{{ data.title }}</h1>
-<div mat-dialog-content>
-  <p>{{ data.content }} {{ data.yesButton.length }}</p>
-</div>
-<div mat-dialog-actions>
-  <button *ngIf="data.noButton" mat-button (click)="onNoClick()">
+<h2 mat-dialog-title>{{ data.title }}</h2>
+<mat-dialog-content class="mat-typography">
+  <p>{{ data.content }}</p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button *ngIf="data.noButton" mat-button mat-dialog-close>
     {{ data.noButton }}
   </button>
-  <button *ngIf="data.yesButton" mat-button>
+  <button
+    *ngIf="data.yesButton"
+    mat-button
+    [mat-dialog-close]="true"
+    cdkFocusInitial
+  >
     {{ data.yesButton }}
   </button>
-</div>
+</mat-dialog-actions>

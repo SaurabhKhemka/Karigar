@@ -21,7 +21,8 @@
       "dom"
     ],
     "types": [
-      "underscore"
+      "underscore",
+      "jest"
     ]
   },
   "angularCompilerOptions": {

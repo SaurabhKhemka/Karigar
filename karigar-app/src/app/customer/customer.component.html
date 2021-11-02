@@ -1,225 +1,91 @@
 <app-header></app-header>
 
+<app-spinner *ngIf="isLoading"></app-spinner>
+
 <div class="p10">
-  <mat-label
-    >Select a customer to view/edit information
-    <mat-form-field appearance="fill">
-      <mat-label>Select a customer</mat-label>
-      <mat-select [(ngModel)]="selectedCustomer">
-        <mat-option value="{}">None</mat-option>
-        <mat-option *ngFor="let c of customers" [value]="c">{{
-          c.name
-        }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-    <p>OR</p>
-    <p>Add a new customer using below form</p></mat-label
+  <mat-form-field appearance="standard">
+    <mat-label>Filter</mat-label>
+    <input
+      matInput
+      (keyup)="applyFilter($event)"
+      placeholder="Enter search contents"
+      #input
+      autocomplete="off"
+    />
+  </mat-form-field>
+
+  <button
+    mat-raised-button
+    color="primary"
+    class="pull-right mb20"
+    (click)="editCustomer({})"
   >
+    Add New Customer
+  </button>
 
-  <p></p>
+  <div class="table-container">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <ng-container matColumnDef="customerName">
+        <th mat-header-cell *matHeaderCellDef>Customer Name</th>
+        <td mat-cell *matCellDef="let element">{{ element.customerName }}</td>
+      </ng-container>
 
-  <strong
-    ><h1>
-      {{
-        (selectedCustomer && selectedCustomer.id ? "Edit" : "Add New") +
-          " Customer"
-      }}
-    </h1></strong
-  >
-  <mat-divider></mat-divider>
+      <ng-container matColumnDef="emailId">
+        <th mat-header-cell *matHeaderCellDef>Email ID</th>
+        <td mat-cell *matCellDef="let element">{{ element.emailId }}</td>
+      </ng-container>
 
-  <form #customerForm="ngForm" novalidate>
-    <p>
-      <mat-form-field>
-        <input
-          type="text"
-          matInput
-          placeholder="Name"
-          [(ngModel)]="selectedCustomer.name"
-          name="name"
-          required
-          #name="ngModel"
-          autocomplete="off"
-        />
-      </mat-form-field>
-      <mat-error *ngIf="!name.valid && name.touched">
-        <div *ngIf="name.errors?.required" class="text-danger">
-          This field is required.
-        </div>
-      </mat-error>
-    </p>
+      <ng-container matColumnDef="phoneNumber">
+        <th mat-header-cell *matHeaderCellDef>Phone No.</th>
+        <td mat-cell *matCellDef="let element">{{ element.phoneNumber }}</td>
+      </ng-container>
 
-    <p>
-      <mat-form-field>
-        <input
-          type="email"
-          matInput
-          placeholder="Email"
-          [(ngModel)]="selectedCustomer.email"
-          name="email"
-          #email="ngModel"
-          autocomplete="off"
-          pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$"
-        />
-      </mat-form-field>
-      <mat-error *ngIf="!email.valid && email.touched">
-        <div *ngIf="email.errors?.required" class="text-danger">
-          This field is required.
-        </div>
-        <div *ngIf="email.errors?.pattern" class="text-danger">
-          Please enter a valid email address.
-        </div>
-      </mat-error>
-    </p>
+      <ng-container matColumnDef="mobileNumber">
+        <th mat-header-cell *matHeaderCellDef>Mobile No.</th>
+        <td mat-cell *matCellDef="let element">{{ element.mobileNumber }}</td>
+      </ng-container>
 
-    <p>
-      <mat-form-field>
-        <input
-          type="text"
-          matInput
-          placeholder="Phone number"
-          [(ngModel)]="selectedCustomer.phone"
-          name="phone"
-          #phone="ngModel"
-          (keypress)="numberOnly($event)"
-          autocomplete="off"
-        />
-      </mat-form-field>
-      <mat-error *ngIf="!phone.valid && phone.touched">
-        <div *ngIf="phone.errors?.required" class="text-danger">
-          This field is required.
-        </div>
-      </mat-error>
-    </p>
+      <ng-container matColumnDef="address">
+        <th mat-header-cell *matHeaderCellDef>Address</th>
+        <td mat-cell *matCellDef="let element">{{ element.address }}</td>
+      </ng-container>
 
-    <p>
-      <mat-form-field>
-        <input
-          type="text"
-          matInput
-          placeholder="Mobile number"
-          [(ngModel)]="selectedCustomer.mobile"
-          name="mobile"
-          #mobile="ngModel"
-          minlength="10"
-          maxlength="10"
-          (keypress)="numberOnly($event)"
-          required
-          autocomplete="off"
-        />
-        <mat-hint align="end">{{ mobile?.value?.length }} / 10</mat-hint>
-      </mat-form-field>
-      <mat-error *ngIf="!mobile.valid && mobile.touched">
-        <div *ngIf="mobile.errors?.required" class="text-danger">
-          This field is required.
-        </div>
-        <div
-          *ngIf="mobile.errors?.minlength || mobile.errors?.maxlength"
-          class="text-danger"
-        >
-          Mobile Number should be 10 digits.
-        </div>
-      </mat-error>
-    </p>
+      <ng-container matColumnDef="state">
+        <th mat-header-cell *matHeaderCellDef>State</th>
+        <td mat-cell *matCellDef="let element">{{ element.state }}</td>
+      </ng-container>
 
-    <p>
-      <mat-form-field>
-        <textarea
-          type="text"
-          matInput
-          placeholder="Address"
-          [(ngModel)]="selectedCustomer.address"
-          name="Address"
-          #address="ngModel"
-          required
-        ></textarea>
-        <mat-hint align="end">{{ address?.value?.length }} / 256</mat-hint>
-      </mat-form-field>
-      <mat-error *ngIf="!address.valid && address.touched">
-        <div *ngIf="address.errors?.required" class="text-danger">
-          This field is required.
-        </div>
-      </mat-error>
-    </p>
+      <ng-container matColumnDef="district">
+        <th mat-header-cell *matHeaderCellDef>District</th>
+        <td mat-cell *matCellDef="let element">{{ element.district }}</td>
+      </ng-container>
 
-    <p>
-      <mat-form-field>
-        <input
-          type="text"
-          matInput
-          placeholder="Pincode"
-          [(ngModel)]="selectedCustomer.pincode"
-          name="pincode"
-          #pincode="ngModel"
-          minlength="6"
-          maxlength="6"
-          (keypress)="numberOnly($event)"
-          required
-          (blur)="fetchStatesandDistricts(selectedCustomer.pincode)"
-        />
-        <mat-hint align="end">{{ pincode?.value?.length }} / 6</mat-hint>
-      </mat-form-field>
-      <mat-error *ngIf="!pincode.valid && pincode.touched">
-        <div *ngIf="pincode.errors?.required" class="text-danger">
-          This field is required.
-        </div>
-        <div
-          *ngIf="pincode.errors?.minlength || pincode.errors?.maxlength"
-          class="text-danger"
-        >
-          Pincode should be 6 digits.
-        </div>
-      </mat-error>
-    </p>
+      <ng-container matColumnDef="pincode">
+        <th mat-header-cell *matHeaderCellDef>Pincode</th>
+        <td mat-cell *matCellDef="let element">{{ element.pincode }}</td>
+      </ng-container>
 
-    <p>
-      <mat-form-field>
-        <mat-select
-          [(ngModel)]="selectedCustomer.state"
-          #state="ngModel"
-          required
-          name="state"
-          placeholder="Select a state"
-          [disabled]="!customerForm.form.controls.pincode.valid"
-        >
-          <mat-option *ngFor="let s of stateArray" [value]="s">{{
-            s.State
-          }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-error *ngIf="!state.valid && state.touched">
-        <div *ngIf="state.errors?.required" class="text-danger">
-          This field is required.
-        </div>
-      </mat-error>
-    </p>
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <td mat-cell *matCellDef="let element">
+          <mat-icon class="curPointer" (click)="editCustomer(element)"
+            >edit</mat-icon
+          >
+          <mat-icon class="curPointer" (click)="deleteCustomer(element)"
+            >delete</mat-icon
+          >
+        </td>
+      </ng-container>
 
-    <p>
-      <mat-form-field>
-        <mat-select
-          [(ngModel)]="selectedCustomer.city"
-          #city="ngModel"
-          required
-          name="district"
-          placeholder="Select a district"
-          [disabled]="!customerForm.form.controls.pincode.valid"
-        >
-          <mat-option *ngFor="let s of districtArray" [value]="s">{{
-            s.District
-          }}</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-error *ngIf="!city.valid && city.touched">
-        <div *ngIf="city.errors?.required" class="text-danger">
-          This field is required.
-        </div>
-      </mat-error>
-    </p>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
-    <div class="button">
-      <button color="primary" mat-raised-button (click)="updateCustomer()">
-        Submit
-      </button>
-    </div>
-  </form>
+      <!-- Row shown when there is no matching data. -->
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="10">
+          No data matching the filter "{{ input.value }}"
+        </td>
+      </tr>
+    </table>
+  </div>
 </div>

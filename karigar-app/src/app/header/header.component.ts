@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { MaterialDialog } from '../modal/mat-dialog.component';
+import { SharedService } from '../shared/shared.service';
 
 @Component({
   selector: 'app-header',
@@ -9,15 +10,19 @@ import { MaterialDialog } from '../modal/mat-dialog.component';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  isLoggedInIser: any;
-  constructor(private dialog: MatDialog, private router: Router) {}
+  userDetails: any = {};
+  constructor(
+    private dialog: MatDialog,
+    private router: Router,
+    private sharedService: SharedService
+  ) {}
 
   ngOnInit(): void {
-    this.isLoggedInIser = sessionStorage.getItem('isUserType');
+    this.userDetails = this.sharedService.getUserDetails();
   }
 
   navigate(type: string) {
-    if (this.isLoggedInIser) {
+    if (this.userDetails.id) {
       this.router.navigate([type]);
     }
   }
@@ -32,9 +37,9 @@ export class HeaderComponent implements OnInit {
       },
     });
 
-    // dialogRef.afterClosed().subscribe((result) => {
-    //   console.log('The dialog was closed');
-    // });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed');
+    });
   }
 
   logout() {
