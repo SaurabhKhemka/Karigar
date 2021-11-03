@@ -1,7 +1,5 @@
 <app-header></app-header>
 
-<app-spinner *ngIf="isLoading"></app-spinner>
-
 <div *ngIf="userDetails.id; else loggedOut">
   <mat-tab-group
     [(selectedIndex)]="selectedIndex"
