@@ -36,6 +36,7 @@ export class ExcelComponent implements OnInit {
   }
   userDetails: any;
   selectedFileForUpload: any;
+  fd: any;
   constructor(
     private inventoryService: InventoryService, private snackBar: MatSnackBar, private sharedService: SharedService
   ) { }
@@ -56,7 +57,13 @@ export class ExcelComponent implements OnInit {
         self.displayUploadedFile(fileReader, file);
       };
       fileReader.readAsArrayBuffer(file);
+
+      this.fd = new FormData();
+      this.fd.append('file', file);
+
     }
+
+
   }
 
   displayUploadedFile(reader: any, file: any) {
@@ -78,7 +85,7 @@ export class ExcelComponent implements OnInit {
       fileName: this.selectedFileForUpload,
       fileContent: this.fileContent,
     };
-    this.inventoryService.uploadFile(this.fileContent).subscribe(
+    this.inventoryService.uploadFile(this.fd).subscribe(
       (response) => {
         this.selectedFileForUpload = null;
         this.getSheets();
