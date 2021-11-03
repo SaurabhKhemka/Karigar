@@ -15,16 +15,14 @@ export class HeaderComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     private sharedService: SharedService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.userDetails = this.sharedService.getUserDetails();
   }
 
   navigate(type: string) {
-    if (this.userDetails.id) {
-      this.router.navigate([type]);
-    }
+    this.router.navigate([type]);
   }
 
   openModal(type: string) {

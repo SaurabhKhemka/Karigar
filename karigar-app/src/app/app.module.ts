@@ -14,6 +14,7 @@ import { ExcelComponent } from './excel/excel.component';
 import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
+import { PasswordFormComponent } from "./login/password-form/password-form.component";
 import { MaterialDialog } from './modal/mat-dialog.component';
 import { ScanComponent } from './scan/scan.component';
 import { SearchComponent } from './search/search.component';
@@ -35,6 +36,7 @@ import { SpinnerComponent } from './spinner/spinner.component';
     SpinnerComponent,
     MaterialDialog,
     CustomerFormComponent,
+    PasswordFormComponent
   ],
   imports: [
     BrowserModule,

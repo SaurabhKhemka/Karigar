@@ -18,6 +18,7 @@
             name="username"
             required
             #username="ngModel"
+            (blur)="validateUserName(loginObj.username)"
           />
         </mat-form-field>
         <mat-error *ngIf="!username.valid && username.touched">
@@ -37,6 +38,7 @@
             name="password"
             required
             #password="ngModel"
+            [disabled]="!isUserPasswordAvailable"
           />
         </mat-form-field>
         <mat-error *ngIf="!password.valid && password.touched">

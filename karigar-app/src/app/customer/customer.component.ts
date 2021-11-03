@@ -69,7 +69,9 @@ export class CustomerComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      this.fetchAllCustomers();
+      if (result) {
+        this.fetchAllCustomers();
+      }
     });
   }
 

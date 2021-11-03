@@ -9,10 +9,6 @@ export class SharedService {
     private httpClient: HttpClient,
   ) { }
 
-  authenticateUser(userName: string, password: string) {
-    return this.httpClient.get('assets/json/login.json');
-  }
-
   getUserDetails() {
     return JSON.parse(localStorage.getItem('userDetails') || '{}');
   }
