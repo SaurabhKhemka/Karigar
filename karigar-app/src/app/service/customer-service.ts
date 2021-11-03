@@ -12,7 +12,7 @@ export class CustomerService {
   constructor(private http: HttpClient) { }
 
   authenticateUser(userName: string) {
-    return this.http.get('/authenticate/customerDetails?emailId=' + userName);
+    return this.http.get(this.API_ENDPOINT + '/authenticate/customerDetails?emailId=' + userName);
 
     // return new Promise((resolve) => {
     //   resolve(
