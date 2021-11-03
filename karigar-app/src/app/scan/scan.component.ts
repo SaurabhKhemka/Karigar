@@ -83,8 +83,10 @@ export class ScanComponent implements OnInit {
 
   onTabChanged(event: any) {
     this.scannedProducts = [];
-    this.dataSource.data = [];
-    this.dataSource._updateChangeSubscription();
+    if (this.dataSource) {
+      this.dataSource.data = [];
+      this.dataSource._updateChangeSubscription();
+    }
     this.filterData.customerId = null;
     this.filterData.keyword = null;
   }
