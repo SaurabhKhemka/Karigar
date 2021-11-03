@@ -78,7 +78,7 @@ export class ExcelComponent implements OnInit {
       fileName: this.selectedFileForUpload,
       fileContent: this.fileContent,
     };
-    this.inventoryService.uploadFile(fileDetails).subscribe(
+    this.inventoryService.uploadFile(this.fileContent).subscribe(
       (response) => {
         this.selectedFileForUpload = null;
         this.getSheets();
