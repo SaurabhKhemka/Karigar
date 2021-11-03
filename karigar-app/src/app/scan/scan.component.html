@@ -67,12 +67,6 @@
       >
         Stop Scan
       </button>
-
-      <barcode-scanner-livestream
-        type="code_128"
-        (valueChanges)="onValueChanges($event)"
-        (started)="(onStarted)"
-      ></barcode-scanner-livestream>
     </mat-tab>
 
     <mat-tab label="Sale">
@@ -119,12 +113,6 @@
       >
         Stop Scan
       </button>
-
-      <barcode-scanner-livestream
-        type="code_128"
-        (valueChanges)="onValueChanges($event)"
-        (started)="(onStarted)"
-      ></barcode-scanner-livestream>
     </mat-tab>
 
     <mat-tab label="Return" *ngIf="isAdmin">
@@ -171,14 +159,14 @@
       >
         Stop Scan
       </button>
-
-      <barcode-scanner-livestream
-        type="code_128"
-        (valueChanges)="onValueChanges($event)"
-        (started)="(onStarted)"
-      ></barcode-scanner-livestream>
     </mat-tab>
   </mat-tab-group>
+
+  <barcode-scanner-livestream
+    type="code_128"
+    (valueChanges)="onValueChanges($event)"
+    (started)="(onStarted)"
+  ></barcode-scanner-livestream>
 
   <div class="table-container">
     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
