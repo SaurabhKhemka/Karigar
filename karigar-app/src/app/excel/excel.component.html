@@ -124,6 +124,11 @@
         <td mat-cell *matCellDef="let element">{{ element.excelNo }}</td>
       </ng-container>
 
+      <ng-container matColumnDef="itemId">
+        <th mat-header-cell *matHeaderCellDef>Item Id</th>
+        <td mat-cell *matCellDef="let element">{{ element.itemId }}</td>
+      </ng-container>
+
       <!-- <ng-container matColumnDef="d">
         <th mat-header-cell *matHeaderCellDef>D</th>
         <td mat-cell *matCellDef="let element">

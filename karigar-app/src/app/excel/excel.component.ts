@@ -25,7 +25,8 @@ export class ExcelComponent implements OnInit {
     'd',
     'e',
     'karigarName',
-    'excelNo'
+    'excelNo',
+    'itemId'
   ];
   dataSource: any;
   isLoading: boolean = false;

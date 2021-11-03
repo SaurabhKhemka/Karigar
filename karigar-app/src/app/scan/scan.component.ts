@@ -42,6 +42,7 @@ export class ScanComponent implements OnInit {
     'e',
     'karigarName',
     'excelNo',
+    'itemId',
     'action',
   ];
   customers: any = [];
