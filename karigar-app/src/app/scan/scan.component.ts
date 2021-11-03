@@ -125,26 +125,26 @@ export class ScanComponent implements OnInit {
 
     this.isLoading = true;
     request['subscribe']((response: any) => {
-      response[0].customerId = response[0].customerId || self.filterData.customerId;
-      response[0].customerName = self.customers.find((c: any) => c.customerId === response[0].customerId).customerName;
+      response.customerId = response.customerId || self.filterData.customerId;
+      response.customerName = self.customers.find((c: any) => c.customerId === response.customerId).customerName;
       if (this.isAdmin) {
         switch (self.selectedIndex) {
           case 0:
-            response[0].orderDate = self.getTodayDate();
+            response.orderDate = self.getTodayDate();
             break;
           case 1:
-            response[0].sellDate = self.getTodayDate();
+            response.sellDate = self.getTodayDate();
             break;
           case 2:
-            response[0].returnDate = self.getTodayDate();
+            response.returnDate = self.getTodayDate();
             break;
           default: break;
         }
       } else {
-        response[0].sellDate = self.getTodayDate();
+        response.sellDate = self.getTodayDate();
       }
 
-      self.scannedProducts.push(response[0]);
+      self.scannedProducts.push(response);
       self.dataSource = new MatTableDataSource(self.scannedProducts);
       self.barcodeScanner.stop();
       self.isLoading = false;
