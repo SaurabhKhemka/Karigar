@@ -5,12 +5,10 @@
     <span class="align-center"></span>
     <span class="example-spacer"></span>
     <!-- <button mat-button (click)="openModal('about')">About</button> -->
-    <button mat-button (click)="openModal('contact')">Contact</button>
-    <button
-      mat-icon-button
-      [matMenuTriggerFor]="menu"
-      *ngIf="userDetails.role === 'admin'"
-    >
+    <button *ngIf="userDetails.id" mat-button (click)="openModal('contact')">
+      Contact
+    </button>
+    <button *ngIf="userDetails.id" mat-icon-button [matMenuTriggerFor]="menu">
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">

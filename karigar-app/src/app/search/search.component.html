@@ -2,7 +2,7 @@
 
 <app-spinner *ngIf="isLoading"></app-spinner>
 
-<div class="p10">
+<div class="p10" *ngIf="userDetails.id; else loggedOut">
   <form class="form-group form-inline" #visitorForm="ngForm" novalidate>
     <mat-form-field appearance="fill">
       <mat-label>From</mat-label>
@@ -35,7 +35,7 @@
       />
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="fill" *ngIf="isAdmin">
       <mat-select
         [(ngModel)]="filterData.customerId"
         name="customer"
@@ -47,7 +47,7 @@
       </mat-select>
     </mat-form-field>
 
-    <mat-form-field appearance="fill">
+    <mat-form-field appearance="fill" *ngIf="isAdmin">
       <mat-select
         [(ngModel)]="filterData.type"
         name="type"
@@ -169,3 +169,10 @@
     </table>
   </div>
 </div>
+
+<ng-template #loggedOut>
+  <span class="m20 tac disBlock fs30"
+    >Please <a href="/login">Login</a> again.</span
+  ></ng-template
+>
+

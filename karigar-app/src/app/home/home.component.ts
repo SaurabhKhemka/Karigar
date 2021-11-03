@@ -9,10 +9,12 @@ import { SharedService } from '../shared/shared.service';
 })
 export class HomeComponent implements OnInit {
   userDetails: any = {};
-  constructor(private router: Router, private sharedService: SharedService) {}
+  isAdmin: boolean = false;
+  constructor(private router: Router, private sharedService: SharedService) { }
 
   ngOnInit(): void {
     this.userDetails = this.sharedService.getUserDetails();
+    this.isAdmin = this.userDetails.role === 'admin';
   }
 
   navigate(type: string) {

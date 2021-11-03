@@ -2,7 +2,7 @@
 
 <app-spinner *ngIf="isLoading"></app-spinner>
 
-<div class="p10">
+<div class="p10" *ngIf="userDetails.id; else loggedOut">
   <mat-form-field appearance="standard">
     <mat-label>Filter</mat-label>
     <input
@@ -89,3 +89,9 @@
     </table>
   </div>
 </div>
+
+<ng-template #loggedOut>
+  <span class="m20 tac disBlock fs30"
+    >Please <a href="/login">Login</a> again.</span
+  ></ng-template
+>

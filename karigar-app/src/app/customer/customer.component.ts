@@ -5,6 +5,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import * as _ from 'underscore';
 import { MaterialDialog } from '../modal/mat-dialog.component';
 import { CustomerService } from "../service/customer-service";
+import { SharedService } from "../shared/shared.service";
 import { CustomerFormComponent } from './customer-form/customer-form.component';
 
 @Component({
@@ -26,13 +27,16 @@ export class CustomerComponent implements OnInit {
   ];
   dataSource: any;
   isLoading: boolean = false;
+  userDetails: any;
   constructor(
     private customerService: CustomerService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private sharedService: SharedService
   ) { }
 
   ngOnInit(): void {
+    this.userDetails = this.sharedService.getUserDetails();
     this.fetchAllCustomers();
   }
 

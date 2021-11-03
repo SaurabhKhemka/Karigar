@@ -12,4 +12,8 @@ export class SharedService {
   getUserDetails() {
     return JSON.parse(localStorage.getItem('userDetails') || '{}');
   }
+
+  getUserRole() {
+    return JSON.parse(localStorage.getItem('userDetails') || '{}').role;
+  }
 }

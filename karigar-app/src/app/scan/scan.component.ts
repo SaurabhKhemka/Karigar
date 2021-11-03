@@ -7,6 +7,7 @@ import { BarcodeScannerLivestreamComponent } from 'ngx-barcode-scanner';
 import { MaterialDialog } from "../modal/mat-dialog.component";
 import { CustomerService } from "../service/customer-service";
 import { InventoryService } from "../service/inventory.service";
+import { SharedService } from "../shared/shared.service";
 
 @Component({
   selector: 'app-scan',
@@ -46,11 +47,17 @@ export class ScanComponent implements OnInit {
   customers: any = [];
   selectedIndex = 0;
   isLoading: boolean = false;
+  userDetails: any;
+  isAdmin: boolean = false;
 
-  constructor(private customerService: CustomerService, private inventoryService: InventoryService, private dialog: MatDialog, private snackBar: MatSnackBar) { }
+  constructor(private customerService: CustomerService, private inventoryService: InventoryService, private dialog: MatDialog, private snackBar: MatSnackBar, private sharedService: SharedService) { }
 
   ngOnInit(): void {
-    this.fetchAllCustomers();
+    this.userDetails = this.sharedService.getUserDetails();
+    this.isAdmin = this.userDetails.role === 'admin';
+    if (this.isAdmin) {
+      this.fetchAllCustomers();
+    }
   }
 
   fetchAllCustomers() {
@@ -98,34 +105,42 @@ export class ScanComponent implements OnInit {
   onValueChanges(result: any) {
     const self = this;
     let request: any;
-    switch (this.selectedIndex) {
-      case 0:
-        request = this.inventoryService.getInventoryItem(result.codeResult.code)
-        break;
-      case 1:
-        request = this.inventoryService.getOrderItem(result.codeResult.code)
-        break;
-      case 2:
-        request = this.inventoryService.getOrderItem(result.codeResult.code)
-        break;
-      default: break;
+    if (this.isAdmin) {
+      switch (this.selectedIndex) {
+        case 0:
+          request = this.inventoryService.getInventoryItem(result.codeResult.code)
+          break;
+        case 1:
+          request = this.inventoryService.getOrderItem(result.codeResult.code)
+          break;
+        case 2:
+          request = this.inventoryService.getOrderItem(result.codeResult.code)
+          break;
+        default: break;
+      }
+    } else {
+      request = this.inventoryService.getOrderItem(result.codeResult.code)
     }
 
     this.isLoading = true;
     request['subscribe']((response: any) => {
       response[0].customerId = response[0].customerId || self.filterData.customerId;
       response[0].customerName = self.customers.find((c: any) => c.customerId === response[0].customerId).customerName;
-      switch (self.selectedIndex) {
-        case 0:
-          response[0].orderDate = self.getTodayDate();
-          break;
-        case 1:
-          response[0].sellDate = self.getTodayDate();
-          break;
-        case 2:
-          response[0].returnDate = self.getTodayDate();
-          break;
-        default: break;
+      if (this.isAdmin) {
+        switch (self.selectedIndex) {
+          case 0:
+            response[0].orderDate = self.getTodayDate();
+            break;
+          case 1:
+            response[0].sellDate = self.getTodayDate();
+            break;
+          case 2:
+            response[0].returnDate = self.getTodayDate();
+            break;
+          default: break;
+        }
+      } else {
+        response[0].sellDate = self.getTodayDate();
       }
 
       self.scannedProducts.push(response[0]);
@@ -169,17 +184,21 @@ export class ScanComponent implements OnInit {
   submitScannedProducts() {
     const self = this;
     let request: any;
-    switch (this.selectedIndex) {
-      case 0:
-        request = this.inventoryService.order(this.scannedProducts)
-        break;
-      case 1:
-        request = this.inventoryService.sell(this.scannedProducts)
-        break;
-      case 2:
-        request = this.inventoryService.return(this.scannedProducts)
-        break;
-      default: break;
+    if (this.isAdmin) {
+      switch (this.selectedIndex) {
+        case 0:
+          request = this.inventoryService.order(this.scannedProducts)
+          break;
+        case 1:
+          request = this.inventoryService.sell(this.scannedProducts)
+          break;
+        case 2:
+          request = this.inventoryService.return(this.scannedProducts)
+          break;
+        default: break;
+      }
+    } else {
+      request = this.inventoryService.sell(this.scannedProducts)
     }
 
     self.isLoading = false;

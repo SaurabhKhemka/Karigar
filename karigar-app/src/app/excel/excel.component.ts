@@ -3,6 +3,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatTableDataSource } from "@angular/material/table";
 import * as $ from 'jquery';
 import { InventoryService } from "../service/inventory.service";
+import { SharedService } from "../shared/shared.service";
 
 @Component({
   selector: 'app-excel',
@@ -32,11 +33,13 @@ export class ExcelComponent implements OnInit {
   filterData = {
     sheetName: null
   }
+  userDetails: any;
   constructor(
-    private inventoryService: InventoryService, private snackBar: MatSnackBar
+    private inventoryService: InventoryService, private snackBar: MatSnackBar, private sharedService: SharedService
   ) { }
 
   ngOnInit(): void {
+    this.userDetails = this.sharedService.getUserDetails();
     this.getSheets();
   }
 

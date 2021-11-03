@@ -4,6 +4,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import * as $ from 'jquery';
 import { CustomerService } from "../service/customer-service";
 import { InventoryService } from "../service/inventory.service";
+import { SharedService } from "../shared/shared.service";
 
 
 @Component({
@@ -30,17 +31,27 @@ export class SearchComponent implements OnInit {
   filterData = {
     fromDate: null,
     toDate: null,
-    customerId: null,
-    type: null
+    customerId: '',
+    type: ''
   };
   dataSource: any;
   isLoading: boolean = false;
   customers: any = [];
+  userDetails: any;
+  isAdmin: boolean = false;
 
-  constructor(private customerService: CustomerService, private inventoryService: InventoryService, private snackBar: MatSnackBar) { }
+  constructor(private customerService: CustomerService, private inventoryService: InventoryService, private snackBar: MatSnackBar, private sharedService: SharedService
+  ) { }
 
   ngOnInit(): void {
-    this.fetchAllCustomers();
+    this.userDetails = this.sharedService.getUserDetails();
+    this.isAdmin = this.userDetails.role === 'admin';
+    if (!this.isAdmin) {
+      this.filterData.customerId = this.userDetails.id;
+      this.filterData.type = 'sale';
+    } else {
+      this.fetchAllCustomers();
+    }
   }
 
   fetchAllCustomers() {
