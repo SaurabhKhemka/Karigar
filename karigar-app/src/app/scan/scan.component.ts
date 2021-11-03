@@ -105,6 +105,7 @@ export class ScanComponent implements OnInit {
 
   onValueChanges(result: any) {
     const self = this;
+    self.barcodeScanner.stop();
     let request: any;
     if (this.isAdmin) {
       switch (this.selectedIndex) {
@@ -146,7 +147,6 @@ export class ScanComponent implements OnInit {
 
       self.scannedProducts.push(response);
       self.dataSource = new MatTableDataSource(self.scannedProducts);
-      self.barcodeScanner.stop();
       self.isLoading = false;
     },
       (error: any) => {
