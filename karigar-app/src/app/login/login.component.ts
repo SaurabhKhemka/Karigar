@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from '@angular/router';
 import { SharedService } from "../shared/shared.service";
 
@@ -20,7 +21,7 @@ export class LoginComponent implements OnInit {
   loginForm!: NgForm;
   isLoading: boolean = false;
 
-  constructor(private router: Router, private sharedService: SharedService) { }
+  constructor(private router: Router, private sharedService: SharedService, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     localStorage.clear();
@@ -53,9 +54,10 @@ export class LoginComponent implements OnInit {
             this.isLoading = false;
           },
           (error) => {
-            this.isLoading = true;
-
-            console.log(error);
+            this.isLoading = false;
+            this.snackBar.open("Server Error", '', {
+              duration: 2000,
+            });
           }
         );
     } else {

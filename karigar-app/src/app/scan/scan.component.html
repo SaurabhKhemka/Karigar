@@ -1,5 +1,7 @@
 <app-header></app-header>
 
+<app-spinner *ngIf="isLoading"></app-spinner>
+
 <mat-tab-group
   [(selectedIndex)]="selectedIndex"
   mat-align-tabs="center"

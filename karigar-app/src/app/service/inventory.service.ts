@@ -49,14 +49,15 @@ export class InventoryService {
   }
 
   getCustomerOrdersPurchasesWithinDateRange(reqObj: any) {
-    if (reqObj.fromDate && reqObj.toDate) {
-      reqObj.fromDate = reqObj.fromDate ? reqObj.fromDate.toString().split("-").reverse().join("-") : null;
+    const reqObjCopy = JSON.parse(JSON.stringify(reqObj));
+    if (reqObjCopy.fromDate && reqObjCopy.toDate) {
+      reqObjCopy.fromDate = reqObjCopy.fromDate ? reqObjCopy.fromDate.toString().split("-").reverse().join("-") : null;
 
-      reqObj.toDate = reqObj.toDate ? reqObj.toDate.toString().split("-").reverse().join("-") : null;
+      reqObjCopy.toDate = reqObjCopy.toDate ? reqObjCopy.toDate.toString().split("-").reverse().join("-") : null;
 
-      return this.http.get(this.API_ENDPOINT + '/inventory/' + (reqObj.type === "sale" ? 'getCustomerPurchasesWithinDateRange' : 'getCustomerOrdersWithinDateRange') + '?customerId=' + reqObj.customerId + '&fromDate=' + reqObj.fromDate + '&toDate=' + reqObj.toDate);
+      return this.http.get(this.API_ENDPOINT + '/inventory/' + (reqObjCopy.type === "sale" ? 'getCustomerPurchasesWithinDateRange' : 'getCustomerOrdersWithinDateRange') + '?customerId=' + reqObjCopy.customerId + '&fromDate=' + reqObjCopy.fromDate + '&toDate=' + reqObjCopy.toDate);
     } else {
-      return this.http.get(this.API_ENDPOINT + '/inventory/' + (reqObj.type === "sale" ? 'getCustomerPurchases' : 'getCustomerOrders') + '?customerId=' + reqObj.customerId);
+      return this.http.get(this.API_ENDPOINT + '/inventory/' + (reqObjCopy.type === "sale" ? 'getCustomerPurchases' : 'getCustomerOrders') + '?customerId=' + reqObjCopy.customerId);
     }
 
     // return new Promise((resolve) => {

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatTableDataSource } from '@angular/material/table';
@@ -43,20 +43,28 @@ export class ScanComponent implements OnInit {
     'excelNo',
     'action',
   ];
-  customers: any;
+  customers: any = [];
   selectedIndex = 0;
+  isLoading: boolean = false;
 
-  constructor(private customerService: CustomerService, private inventoryService: InventoryService, private dialog: MatDialog, private snackBar: MatSnackBar, private change: ChangeDetectorRef) { }
+  constructor(private customerService: CustomerService, private inventoryService: InventoryService, private dialog: MatDialog, private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.fetchAllCustomers();
   }
 
   fetchAllCustomers() {
+    this.isLoading = true;
     this.customerService.getCustomers().subscribe((response: any) => {
       this.customers = response;
+      this.isLoading = false;
     },
-      (error) => console.log(error)
+      (error) => {
+        this.isLoading = false;
+        this.snackBar.open("Server Error", '', {
+          duration: 2000,
+        });
+      }
     );
   }
 
@@ -103,7 +111,8 @@ export class ScanComponent implements OnInit {
       default: break;
     }
 
-    request['subscribe'](function (response: any) {
+    this.isLoading = true;
+    request['subscribe']((response: any) => {
       response[0].customerId = response[0].customerId || self.filterData.customerId;
       response[0].customerName = self.customers.find((c: any) => c.customerId === response[0].customerId).customerName;
       switch (self.selectedIndex) {
@@ -122,8 +131,10 @@ export class ScanComponent implements OnInit {
       self.scannedProducts.push(response[0]);
       self.dataSource = new MatTableDataSource(self.scannedProducts);
       self.barcodeScanner.stop();
+      self.isLoading = false;
     },
       (error: any) => {
+        self.isLoading = false;
         self.snackBar.open("Please scan the product again", '', {
           duration: 2000,
         });
@@ -171,12 +182,15 @@ export class ScanComponent implements OnInit {
       default: break;
     }
 
-    request['subscribe'](function (response: any) {
+    self.isLoading = false;
+    request['subscribe']((response: any) => {
       self.scannedProducts = [];
       self.dataSource.data = [];
       self.dataSource._updateChangeSubscription();
+      self.isLoading = false;
     },
       (error: any) => {
+        self.isLoading = false;
         self.snackBar.open("Server Error", '', {
           duration: 2000,
         });
@@ -201,7 +215,7 @@ export class ScanComponent implements OnInit {
 
   exportTable() {
     //TableUtil.exportTableToExcel('ExampleMaterialTable');
-    this.exportExcel('ExampleMaterialTable', 'ExampleMaterialTable');
+    this.exportExcel('ScannedProducts', 'ScannedProducts');
   }
 
   exportExcel(id: string, name: string) {

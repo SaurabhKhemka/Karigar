@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatTableDataSource } from "@angular/material/table";
 import * as $ from 'jquery';
-import { TableUtil } from '../core/tableUtils';
 import { CustomerService } from "../service/customer-service";
 import { InventoryService } from "../service/inventory.service";
 
@@ -13,7 +12,6 @@ import { InventoryService } from "../service/inventory.service";
   styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent implements OnInit {
-
   displayedColumns: string[] = [
     'sheetName',
     'serialNo',
@@ -26,7 +24,8 @@ export class SearchComponent implements OnInit {
     'd',
     'e',
     'karigarName',
-    'excelNo'
+    'excelNo',
+    'itemId'
   ];
   filterData = {
     fromDate: null,
@@ -36,7 +35,7 @@ export class SearchComponent implements OnInit {
   };
   dataSource: any;
   isLoading: boolean = false;
-  customers: any;
+  customers: any = [];
 
   constructor(private customerService: CustomerService, private inventoryService: InventoryService, private snackBar: MatSnackBar) { }
 
@@ -45,10 +44,17 @@ export class SearchComponent implements OnInit {
   }
 
   fetchAllCustomers() {
+    this.isLoading = true;
     this.customerService.getCustomers().subscribe((response: any) => {
       this.customers = response;
+      this.isLoading = false;
     },
-      (error) => console.log(error)
+      (error) => {
+        this.isLoading = false;
+        this.snackBar.open("Server Error", '', {
+          duration: 2000,
+        });
+      }
     );
   }
 
@@ -63,17 +69,24 @@ export class SearchComponent implements OnInit {
         duration: 2000,
       });
     } else {
+      this.isLoading = true;
       this.inventoryService.getCustomerOrdersPurchasesWithinDateRange(this.filterData).subscribe((response: any) => {
         this.dataSource = new MatTableDataSource(response);
+        this.isLoading = false;
       },
-        (error) => console.log(error)
+        (error) => {
+          this.isLoading = false;
+          this.snackBar.open("Server Error", '', {
+            duration: 2000,
+          });
+        }
       );
     }
   }
 
   exportTable() {
     //TableUtil.exportTableToExcel('ExampleMaterialTable');
-    this.exportExcel('ExampleMaterialTable', 'ExampleMaterialTable');
+    this.exportExcel('SearchResults', 'SearchResults');
   }
 
   exportExcel(id: string, name: string) {
@@ -101,9 +114,4 @@ export class SearchComponent implements OnInit {
     var a = $('<a>', { href: uri, download: file_name });
     $(a)[0].click();
   }
-
-  exportNormalTable() {
-    TableUtil.exportTableToExcel('ExampleNormalTable');
-  }
-
 }

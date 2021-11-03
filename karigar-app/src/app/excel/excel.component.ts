@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatTableDataSource } from "@angular/material/table";
 import * as $ from 'jquery';
 import { InventoryService } from "../service/inventory.service";
@@ -32,7 +33,7 @@ export class ExcelComponent implements OnInit {
     sheetName: null
   }
   constructor(
-    private inventoryService: InventoryService
+    private inventoryService: InventoryService, private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -69,28 +70,44 @@ export class ExcelComponent implements OnInit {
     this.isLoading = true;
     this.inventoryService.uploadFile(this.fileContent).subscribe(
       (response) => {
-        this.isLoading = false;
         this.getSheets();
       },
       (err) => {
         this.isLoading = false;
+        this.snackBar.open("Server Error", '', {
+          duration: 2000,
+        });
       }
     );
   }
 
   getSheets() {
+    this.isLoading = true;
     this.inventoryService.getSheetName().subscribe((response: any) => {
       this.sheets = response;
+      this.isLoading = false;
     },
-      (error) => console.log(error)
+      (error) => {
+        this.isLoading = false;
+        this.snackBar.open("Server Error", '', {
+          duration: 2000,
+        });
+      }
     );
   }
 
   onSheetChange(event: any) {
+    this.isLoading = true;
     this.inventoryService.getProducts(event.value).subscribe((response: any) => {
       this.dataSource = new MatTableDataSource(response);
+      this.isLoading = false;
     },
-      (error) => console.log(error)
+      (error) => {
+        this.isLoading = false;
+        this.snackBar.open("Server Error", '', {
+          duration: 2000,
+        });
+      }
     );
   }
 
@@ -101,7 +118,7 @@ export class ExcelComponent implements OnInit {
 
   exportTable() {
     //TableUtil.exportTableToExcel('ExampleMaterialTable');
-    this.exportExcel('ExampleMaterialTable', 'ExampleMaterialTable');
+    this.exportExcel('ProductsList', 'ProductsList');
   }
 
   exportExcel(id: string, name: string) {

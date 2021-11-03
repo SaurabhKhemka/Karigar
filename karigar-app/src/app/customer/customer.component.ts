@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatTableDataSource } from '@angular/material/table';
 import * as _ from 'underscore';
 import { MaterialDialog } from '../modal/mat-dialog.component';
@@ -27,7 +28,8 @@ export class CustomerComponent implements OnInit {
   isLoading: boolean = false;
   constructor(
     private customerService: CustomerService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -35,10 +37,17 @@ export class CustomerComponent implements OnInit {
   }
 
   fetchAllCustomers() {
+    this.isLoading = true;
     this.customerService.getCustomers().subscribe((response: any) => {
       this.dataSource = new MatTableDataSource(response);
+      this.isLoading = false;
     },
-      (error) => console.log(error)
+      (error) => {
+        this.isLoading = false;
+        this.snackBar.open("Server Error", '', {
+          duration: 2000,
+        });
+      }
     );
   }
 
@@ -77,13 +86,20 @@ export class CustomerComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        this.isLoading = true;
         this.customerService.deleteCustomer(customer.customerId).subscribe(
-          (data: any) => {
-            if (data) {
+          (response: any) => {
+            if (response) {
               this.fetchAllCustomers();
             }
+            this.isLoading = false;
           },
-          (error) => console.log(error)
+          (error) => {
+            this.isLoading = false;
+            this.snackBar.open("Server Error", '', {
+              duration: 2000,
+            });
+          }
         );
       }
     });
