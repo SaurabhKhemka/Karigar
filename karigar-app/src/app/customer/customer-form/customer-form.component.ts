@@ -32,7 +32,10 @@ export class CustomerFormComponent implements OnInit {
       this.isLoading = true;
       this.customerService.saveCustomer(this.data.selectedCustomer).subscribe((response: any) => {
         if (response) {
-          this.dialogRef.close();
+          this.dialogRef.close(true);
+          this.snackBar.open("Saved successfully", '', {
+            duration: 2000,
+          });
         }
         this.isLoading = false;
       },

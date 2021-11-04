@@ -41,7 +41,7 @@ export class PasswordFormComponent implements OnInit {
             this.snackBar.open("Password saved successfully", '', {
               duration: 2000,
             });
-            this.dialogRef.close();
+            this.dialogRef.close(true);
           }
           this.isLoading = false;
         },

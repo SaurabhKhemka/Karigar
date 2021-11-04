@@ -13,10 +13,7 @@
       (change)="chooseFile($event)"
       name="File"
       accept=".xls, .xlsx"
-
     />
-
-     <!-- enctype="multipart/form-data" -->
 
     <button color="primary" mat-raised-button (click)="uploadFile()">
       Submit
@@ -65,7 +62,7 @@
       mat-table
       [dataSource]="dataSource"
       class="mat-elevation-z8"
-      id="ExampleMaterialTable"
+      id="ProductsList"
     >
       <ng-container matColumnDef="sheetName">
         <th mat-header-cell *matHeaderCellDef>Sheet Name</th>

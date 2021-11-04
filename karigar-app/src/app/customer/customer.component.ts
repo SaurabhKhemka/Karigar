@@ -97,6 +97,9 @@ export class CustomerComponent implements OnInit {
           (response: any) => {
             if (response) {
               this.fetchAllCustomers();
+              this.snackBar.open("Deleted successfully", '', {
+                duration: 2000,
+              });
             }
             this.isLoading = false;
           },

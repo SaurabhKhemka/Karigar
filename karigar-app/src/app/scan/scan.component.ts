@@ -206,9 +206,14 @@ export class ScanComponent implements OnInit {
 
     self.isLoading = false;
     request['subscribe']((response: any) => {
-      self.scannedProducts = [];
-      self.dataSource.data = [];
-      self.dataSource._updateChangeSubscription();
+      if (response) {
+        self.scannedProducts = [];
+        self.dataSource.data = [];
+        self.dataSource._updateChangeSubscription();
+        this.snackBar.open("Submitted successfully", '', {
+          duration: 2000,
+        });
+      }
       self.isLoading = false;
     },
       (error: any) => {
