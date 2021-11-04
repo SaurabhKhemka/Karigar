@@ -4,6 +4,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatTableDataSource } from '@angular/material/table';
 import * as $ from 'jquery';
 import { BarcodeScannerLivestreamComponent } from 'ngx-barcode-scanner';
+import * as _ from 'underscore';
 import { MaterialDialog } from "../modal/mat-dialog.component";
 import { CustomerService } from "../service/customer-service";
 import { InventoryService } from "../service/inventory.service";
@@ -33,8 +34,8 @@ export class ScanComponent implements OnInit {
     'sheetName',
     'serialNo',
     'grossWeight',
-    'netWeight',
     'beadWeight',
+    'netWeight',
     'a',
     'b',
     'c',
@@ -58,6 +59,18 @@ export class ScanComponent implements OnInit {
     this.isAdmin = this.userDetails.role === 'admin';
     if (this.isAdmin) {
       this.fetchAllCustomers();
+    } else {
+      this.displayedColumns = [
+        'index',
+        'customerName',
+        'sheetName',
+        'serialNo',
+        'grossWeight',
+        'beadWeight',
+        'netWeight',
+        'itemId',
+        'action'
+      ];
     }
   }
 
@@ -107,7 +120,7 @@ export class ScanComponent implements OnInit {
 
   onValueChanges(result: any) {
     const self = this;
-    self.barcodeScanner.stop();
+    self.stopScan();
     let request: any;
     if (this.isAdmin) {
       switch (this.selectedIndex) {
@@ -148,6 +161,11 @@ export class ScanComponent implements OnInit {
       }
 
       self.scannedProducts.push(response);
+
+      self.scannedProducts = _.uniq(self.scannedProducts, function (x) {
+        return x.itemId;
+      });
+
       self.dataSource = new MatTableDataSource(self.scannedProducts);
       self.isLoading = false;
     },

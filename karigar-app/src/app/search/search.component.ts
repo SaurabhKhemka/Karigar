@@ -17,8 +17,8 @@ export class SearchComponent implements OnInit {
     'sheetName',
     'serialNo',
     'grossWeight',
-    'netWeight',
     'beadWeight',
+    'netWeight',
     'a',
     'b',
     'c',
@@ -46,11 +46,19 @@ export class SearchComponent implements OnInit {
   ngOnInit(): void {
     this.userDetails = this.sharedService.getUserDetails();
     this.isAdmin = this.userDetails.role === 'admin';
-    if (!this.isAdmin) {
+    if (this.isAdmin) {
+      this.fetchAllCustomers();
+    } else {
       this.filterData.customerId = this.userDetails.id;
       this.filterData.type = 'sale';
-    } else {
-      this.fetchAllCustomers();
+      this.displayedColumns = [
+        'sheetName',
+        'serialNo',
+        'grossWeight',
+        'beadWeight',
+        'netWeight',
+        'itemId'
+      ];
     }
   }
 

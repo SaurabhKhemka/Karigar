@@ -88,8 +88,6 @@
     >
       Download in Excel
     </button>
-
-    <!-- <mat-paginator [length]="resultsLength" [pageSize]="30" aria-label="Select page of GitHub search results"></mat-paginator> -->
   </div>
 
   <div class="table-container">
@@ -114,47 +112,47 @@
         <td mat-cell *matCellDef="let element">{{ element.grossWeight }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="netWeight">
-        <th mat-header-cell *matHeaderCellDef>Net Weight</th>
-        <td mat-cell *matCellDef="let element">{{ element.netWeight }}</td>
-      </ng-container>
-
       <ng-container matColumnDef="beadWeight">
         <th mat-header-cell *matHeaderCellDef>Bead Weight</th>
         <td mat-cell *matCellDef="let element">{{ element.beadWeight }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="a">
+      <ng-container matColumnDef="netWeight">
+        <th mat-header-cell *matHeaderCellDef>Net Weight</th>
+        <td mat-cell *matCellDef="let element">{{ element.netWeight }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="a" *ngIf="isAdmin">
         <th mat-header-cell *matHeaderCellDef>A</th>
         <td mat-cell *matCellDef="let element">{{ element.a }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="b">
+      <ng-container matColumnDef="b" *ngIf="isAdmin">
         <th mat-header-cell *matHeaderCellDef>B</th>
         <td mat-cell *matCellDef="let element">{{ element.b }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="c">
+      <ng-container matColumnDef="c" *ngIf="isAdmin">
         <th mat-header-cell *matHeaderCellDef>C</th>
         <td mat-cell *matCellDef="let element">{{ element.c }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="d">
+      <ng-container matColumnDef="d" *ngIf="isAdmin">
         <th mat-header-cell *matHeaderCellDef>D</th>
         <td mat-cell *matCellDef="let element">{{ element.d }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="e">
+      <ng-container matColumnDef="e" *ngIf="isAdmin">
         <th mat-header-cell *matHeaderCellDef>E</th>
         <td mat-cell *matCellDef="let element">{{ element.e }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="karigarName">
+      <ng-container matColumnDef="karigarName" *ngIf="isAdmin">
         <th mat-header-cell *matHeaderCellDef>Karigar Name</th>
         <td mat-cell *matCellDef="let element">{{ element.karigarName }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="excelNo">
+      <ng-container matColumnDef="excelNo" *ngIf="isAdmin">
         <th mat-header-cell *matHeaderCellDef>Excel No.</th>
         <td mat-cell *matCellDef="let element">{{ element.excelNo }}</td>
       </ng-container>
@@ -175,4 +173,3 @@
     >Please <a href="/login">Login</a> again.</span
   ></ng-template
 >
-
