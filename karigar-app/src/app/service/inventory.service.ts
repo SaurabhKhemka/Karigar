@@ -26,6 +26,10 @@ export class InventoryService {
     // });
   }
 
+  getAllProducts() {
+    return this.http.get(this.API_ENDPOINT + '/inventory/getAllInventoryItems');
+  }
+
   getProducts(sheetName: string) {
     return this.http.get(this.API_ENDPOINT + '/inventory/getSheetItem?sheetName=' + sheetName);
 

@@ -23,9 +23,10 @@ export class SearchComponent implements OnInit {
     'b',
     'c',
     'd',
-    'e',
     'karigarName',
     'excelNo',
+    'productType',
+    'huId',
     'itemId'
   ];
   filterData = {
@@ -83,13 +84,9 @@ export class SearchComponent implements OnInit {
   }
 
   filterResults() {
-    if (!this.filterData.type || !this.filterData.customerId) {
-      this.snackBar.open("Please select type and customer", '', {
-        duration: 2000,
-      });
-    } else {
+    if (this.filterData.type === "inventory") {
       this.isLoading = true;
-      this.inventoryService.getCustomerOrdersPurchasesWithinDateRange(this.filterData).subscribe((response: any) => {
+      this.inventoryService.getAllProducts().subscribe((response: any) => {
         this.dataSource = new MatTableDataSource(response);
         this.isLoading = false;
       },
@@ -100,6 +97,25 @@ export class SearchComponent implements OnInit {
           });
         }
       );
+    } else {
+      if (!this.filterData.type || !this.filterData.customerId) {
+        this.snackBar.open("Please select type and customer", '', {
+          duration: 2000,
+        });
+      } else {
+        this.isLoading = true;
+        this.inventoryService.getCustomerOrdersPurchasesWithinDateRange(this.filterData).subscribe((response: any) => {
+          this.dataSource = new MatTableDataSource(response);
+          this.isLoading = false;
+        },
+          (error) => {
+            this.isLoading = false;
+            this.snackBar.open("Server Error", '', {
+              duration: 2000,
+            });
+          }
+        );
+      }
     }
   }
 

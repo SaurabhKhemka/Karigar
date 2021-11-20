@@ -23,9 +23,10 @@ export class ExcelComponent implements OnInit {
     'b',
     'c',
     'd',
-    'e',
     'karigarName',
     'excelNo',
+    'productType',
+    'huId',
     'itemId'
   ];
   dataSource: any;
@@ -44,6 +45,7 @@ export class ExcelComponent implements OnInit {
   ngOnInit(): void {
     this.userDetails = this.sharedService.getUserDetails();
     this.getSheets();
+    this.getInventoryItems();
   }
 
   chooseFile(event: any) {
@@ -90,6 +92,7 @@ export class ExcelComponent implements OnInit {
         if (response) {
           this.selectedFileForUpload = null;
           this.getSheets();
+          this.getInventoryItems();
           this.snackBar.open("File uploaded successfully", '', {
             duration: 2000,
           });
@@ -109,6 +112,21 @@ export class ExcelComponent implements OnInit {
     this.isLoading = true;
     this.inventoryService.getSheetName().subscribe((response: any) => {
       this.sheets = response;
+      this.isLoading = false;
+    },
+      (error) => {
+        this.isLoading = false;
+        this.snackBar.open("Server Error", '', {
+          duration: 2000,
+        });
+      }
+    );
+  }
+
+  getInventoryItems() {
+    this.isLoading = true;
+    this.inventoryService.getAllProducts().subscribe((response: any) => {
+      this.dataSource = new MatTableDataSource(response);
       this.isLoading = false;
     },
       (error) => {

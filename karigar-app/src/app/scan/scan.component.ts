@@ -40,9 +40,10 @@ export class ScanComponent implements OnInit {
     'b',
     'c',
     'd',
-    'e',
     'karigarName',
     'excelNo',
+    'productType',
+    'huId',
     'itemId',
     'action',
   ];
